@@ -13,6 +13,8 @@ public class ChessWindow extends JFrame {
 
     // Guarda la casilla seleccionada
     private JButton selectedSquare = null;
+    private int selectedRow;
+    private int selectedCol;
 
     // true = turno blancas, false = turno negras
     private boolean whiteTurn = true;
@@ -91,6 +93,8 @@ public class ChessWindow extends JFrame {
                 return;
 
             selectedSquare = square;
+            selectedRow = row;
+            selectedCol = col;
             square.setBackground(Color.YELLOW);
             return;
         }
@@ -102,15 +106,17 @@ public class ChessWindow extends JFrame {
             return;
         }
 
-        // Mover la pieza (por ahora sin validar movimiento)
-        square.setText(selectedSquare.getText());
-        selectedSquare.setText("");
+        if (isValidPawnMove(selectedRow, selectedCol, row, col)) {
+
+            square.setText(selectedSquare.getText());
+            selectedSquare.setText("");
+
+            whiteTurn = !whiteTurn;
+        }
 
         resetColors();
         selectedSquare = null;
 
-        // Cambiar turno
-        whiteTurn = !whiteTurn;
     }
 
     /**
@@ -129,4 +135,35 @@ public class ChessWindow extends JFrame {
             }
         }
     }
+
+    /**
+     * Valida el movimiento del peón
+     */
+    private boolean isValidPawnMove(int fromRow, int fromCol, int toRow, int toCol) {
+
+        String piece = selectedSquare.getText();
+        int direction = piece.equals("♙") ? -1 : 1;
+
+        // Movimiento hacia adelante
+        if (fromCol == toCol && toRow == fromRow + direction) {
+
+            // Casilla destino debe estar vacía
+            return board[toRow][toCol].getText().isEmpty();
+        }
+
+        // Captura en diagonal
+        if (Math.abs(fromCol - toCol) == 1 && toRow == fromRow + direction) {
+
+            String target = board[toRow][toCol].getText();
+
+            // Captura solo a pieza contraria
+            if (piece.equals("♙") && target.equals("♟"))
+                return true;
+            if (piece.equals("♟") && target.equals("♙"))
+                return true;
+        }
+
+        return false;
+    }
+
 }
