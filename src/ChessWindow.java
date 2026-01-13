@@ -108,9 +108,14 @@ public class ChessWindow extends JFrame {
 
         if (isValidPawnMove(selectedRow, selectedCol, row, col)) {
 
+            // Mover la pieza
             square.setText(selectedSquare.getText());
             selectedSquare.setText("");
 
+            // Promocion del peon
+            promotePawnIfNeeded(square, row);
+
+            // Cambiar turno
             whiteTurn = !whiteTurn;
         }
 
@@ -177,6 +182,24 @@ public class ChessWindow extends JFrame {
         }
 
         return false;
+    }
+
+    /*
+     * Promociona el peon si llega al final del tablero
+     */
+    private void promotePawnIfNeeded(JButton square, int row) {
+
+        String piece = square.getText();
+
+        // Peon blanco llega arriba
+        if (piece.equals("♙") && row == 0) {
+            square.setText("♕"); // Reina blanca
+        }
+
+        // Peon negro llega abajo
+        if (piece.equals("♟") && row == 7) {
+            square.setText("♕"); // Reina negra
+        }
     }
 
 }
