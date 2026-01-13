@@ -71,6 +71,14 @@ public class ChessWindow extends JFrame {
             board[1][col].setText("♟"); // negras
             board[6][col].setText("♙"); // blancas
         }
+
+        // Caballos negros
+        board[0][1].setText("♞");
+        board[0][6].setText("♞");
+
+        // Caballos blancos
+        board[7][1].setText("♘");
+        board[7][6].setText("♘");
     }
 
     /**
@@ -87,9 +95,11 @@ public class ChessWindow extends JFrame {
             }
 
             // Validar turno
-            if (whiteTurn && !square.getText().equals("♙"))
+            String piece = square.getText();
+
+            if (whiteTurn && "♟♞".contains(piece))
                 return;
-            if (!whiteTurn && !square.getText().equals("♟"))
+            if (!whiteTurn && "♙♘".contains(piece))
                 return;
 
             selectedSquare = square;
@@ -106,7 +116,7 @@ public class ChessWindow extends JFrame {
             return;
         }
 
-        if (isValidPawnMove(selectedRow, selectedCol, row, col)) {
+        if (isValidMove(selectedRow, selectedCol, row, col)) {
 
             // Mover la pieza
             square.setText(selectedSquare.getText());
@@ -198,8 +208,60 @@ public class ChessWindow extends JFrame {
 
         // Peon negro llega abajo
         if (piece.equals("♟") && row == 7) {
-            square.setText("♕"); // Reina negra
+            square.setText("♛"); // Reina negra
         }
+    }
+
+    /*
+     * Decide qye validacion usar segun la pieza
+     */
+
+    private boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
+
+        String piece = selectedSquare.getText();
+
+        // Peon
+        if (piece.equals("♙") || piece.equals("♟")) {
+            return isValidPawnMove(fromRow, fromCol, toRow, toCol);
+        }
+
+        // Caballo
+        if (piece.equals("♘") || piece.equals("♞")) {
+            return isValidKnightMove(fromRow, fromCol, toRow, toCol);
+        }
+
+        return false;
+    }
+
+    /*
+     * Valida el movimiento del caballo
+     */
+
+    private boolean isValidKnightMove(int fromRow, int fromCol, int toRow, int toCol) {
+
+        int rowDiff = Math.abs(fromRow - toRow);
+        int colDiff = Math.abs(fromCol - toCol);
+
+        // Regla en L
+        if (!((rowDiff == 2 && colDiff == 1) ||
+                (rowDiff == 1 && colDiff == 2))) {
+            return false;
+        }
+
+        String target = board[toRow][toCol].getText();
+        String piece = selectedSquare.getText();
+
+        // Casilla vacia
+        if (target.isEmpty())
+            return true;
+
+        // Captura solo a pieza enemiga
+        if ("♘♙".contains(piece) && "♟♞".contains(target))
+            return true;
+        if ("♞".contains(piece) && "♙♘".contains(target))
+            return true;
+
+        return false;
     }
 
 }
