@@ -2,38 +2,31 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.Color;
+import java.awt.Font;
 
 /**
  * Ventana principal del juego de ajedrez
  */
 public class ChessWindow extends JFrame {
 
-    // Matriz 8x8 de botones (casillas del tablero)
+    // Tablero 8x8
     private JButton[][] board = new JButton[8][8];
 
     public ChessWindow() {
 
-        // Título de la ventana
-        setTitle("Ajedrez - Java BY: WAZDeveloper");
-
-        // Tamaño de la ventana
+        setTitle("Ajedrez - Java");
         setSize(600, 600);
-
-        // Cierra el programa al cerrar la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Layout de 8 filas x 8 columnas
         setLayout(new GridLayout(8, 8));
 
-        // Crear el tablero
         createBoard();
+        placePieces();
 
-        // Mostrar la ventana
         setVisible(true);
     }
 
     /**
-     * Crea el tablero de ajedrez visual
+     * Crea el tablero visual
      */
     private void createBoard() {
 
@@ -41,20 +34,35 @@ public class ChessWindow extends JFrame {
             for (int col = 0; col < 8; col++) {
 
                 JButton square = new JButton();
+                square.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 36));
 
-                // Colores del tablero (blanco y negro)
                 if ((row + col) % 2 == 0) {
                     square.setBackground(Color.WHITE);
                 } else {
                     square.setBackground(Color.GRAY);
                 }
 
-                // Quita el borde del botón
                 square.setBorderPainted(false);
 
                 board[row][col] = square;
                 add(square);
             }
+        }
+    }
+
+    /**
+     * Coloca las piezas iniciales
+     */
+    private void placePieces() {
+
+        // Peones negros (fila 1)
+        for (int col = 0; col < 8; col++) {
+            board[1][col].setText("♟");
+        }
+
+        // Peones blancos (fila 6)
+        for (int col = 0; col < 8; col++) {
+            board[6][col].setText("♙");
         }
     }
 }
