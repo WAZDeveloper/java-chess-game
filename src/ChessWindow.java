@@ -144,19 +144,32 @@ public class ChessWindow extends JFrame {
         String piece = selectedSquare.getText();
         int direction = piece.equals("♙") ? -1 : 1;
 
-        // Movimiento hacia adelante
-        if (fromCol == toCol && toRow == fromRow + direction) {
+        // Fila inicial según color
+        int startRow = piece.equals("♙") ? 6 : 1;
 
-            // Casilla destino debe estar vacía
+        // 1️ Movimiento normal (una casilla hacia adelante)
+        if (fromCol == toCol && toRow == fromRow + direction) {
             return board[toRow][toCol].getText().isEmpty();
         }
 
-        // Captura en diagonal
-        if (Math.abs(fromCol - toCol) == 1 && toRow == fromRow + direction) {
+        // 2️ Doble paso inicial
+        if (fromCol == toCol &&
+                fromRow == startRow &&
+                toRow == fromRow + (2 * direction)) {
+
+            // Ambas casillas deben estar vacías
+            int middleRow = fromRow + direction;
+
+            return board[middleRow][toCol].getText().isEmpty()
+                    && board[toRow][toCol].getText().isEmpty();
+        }
+
+        // 3️ Captura en diagonal
+        if (Math.abs(fromCol - toCol) == 1 &&
+                toRow == fromRow + direction) {
 
             String target = board[toRow][toCol].getText();
 
-            // Captura solo a pieza contraria
             if (piece.equals("♙") && target.equals("♟"))
                 return true;
             if (piece.equals("♟") && target.equals("♙"))
