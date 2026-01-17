@@ -28,8 +28,23 @@ public class Board {
     }
 
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol) {
-        board[toRow][toCol] = board[fromRow][fromCol];
+
+        Piece piece = board[fromRow][fromCol];
         board[fromRow][fromCol] = null;
+
+        // PROMOCIÓN DE PEÓN
+        if (piece instanceof Pawn) {
+            if (piece.isWhite() && toRow == 0) {
+                board[toRow][toCol] = new Queen(true);
+                return;
+            }
+            if (!piece.isWhite() && toRow == 7) {
+                board[toRow][toCol] = new Queen(false);
+                return;
+            }
+        }
+
+        board[toRow][toCol] = piece;
     }
 
     public Piece[][] getGrid() {
