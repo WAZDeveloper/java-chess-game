@@ -21,6 +21,18 @@ public class Board {
         board[0][6] = new Knight(false);
         board[7][1] = new Knight(true);
         board[7][6] = new Knight(true);
+
+        // Torres
+        board[0][0] = new Rook(false);
+        board[0][7] = new Rook(false);
+        board[7][0] = new Rook(true);
+        board[7][7] = new Rook(true);
+
+        // Alfiles
+        board[0][2] = new Bishop(false);
+        board[0][5] = new Bishop(false);
+        board[7][2] = new Bishop(true);
+        board[7][5] = new Bishop(true);
     }
 
     public Piece getPiece(int row, int col) {
