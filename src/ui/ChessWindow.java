@@ -7,6 +7,7 @@ import model.*;
 public class ChessWindow extends JFrame {
 
     private JButton[][] boardButtons;
+    private Color[][] originalColors = new Color[8][8];
     private Board gameBoard;
 
     private boolean whiteTurn = true;
@@ -36,12 +37,16 @@ public class ChessWindow extends JFrame {
                 button.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 36));
                 button.setFocusPainted(false);
 
-                // Colores del tablero
+                // Color del tablero
+                Color color;
                 if ((row + col) % 2 == 0) {
-                    button.setBackground(new Color(240, 217, 181));
+                    color = new Color(240, 217, 181);
                 } else {
-                    button.setBackground(new Color(181, 136, 99));
+                    color = new Color(181, 136, 99);
                 }
+
+                button.setBackground(color);
+                originalColors[row][col] = color;
 
                 int r = row;
                 int c = col;
@@ -65,6 +70,35 @@ public class ChessWindow extends JFrame {
         }
     }
 
+    private void clearHighlights() {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                boardButtons[r][c].setBackground(originalColors[r][c]);
+            }
+        }
+    }
+
+    private void highlightMoves(Piece piece, int fromRow, int fromCol) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+
+                if (r == fromRow && c == fromCol)
+                    continue;
+
+                boolean valid = piece.isValidMove(
+                        fromRow, fromCol,
+                        r, c,
+                        gameBoard.getGrid());
+
+                if (valid) {
+                    boardButtons[r][c].setBackground(new Color(144, 238, 144)); // verde
+                } else {
+                    boardButtons[r][c].setBackground(new Color(240, 128, 128)); // rojo
+                }
+            }
+        }
+    }
+
     private void onSquareClick(int row, int col) {
 
         Piece clickedPiece = gameBoard.getPiece(row, col);
@@ -74,8 +108,6 @@ public class ChessWindow extends JFrame {
 
             if (clickedPiece == null)
                 return;
-
-            // Validar turno
             if (clickedPiece.isWhite() != whiteTurn)
                 return;
 
@@ -83,11 +115,15 @@ public class ChessWindow extends JFrame {
             selectedRow = row;
             selectedCol = col;
 
-            boardButtons[row][col].setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+            clearHighlights();
+            highlightMoves(selectedPiece, selectedRow, selectedCol);
+
+            boardButtons[row][col].setBorder(
+                    BorderFactory.createLineBorder(Color.BLUE, 3));
             return;
         }
 
-        // INTENTAR MOVER PIEZA
+        // INTENTAR MOVER
         if (selectedPiece.isValidMove(
                 selectedRow, selectedCol,
                 row, col,
@@ -97,10 +133,11 @@ public class ChessWindow extends JFrame {
             whiteTurn = !whiteTurn;
         }
 
-        // LIMPIAR SELECCIÓN VISUAL
+        // LIMPIAR
         boardButtons[selectedRow][selectedCol].setBorder(null);
         selectedPiece = null;
 
+        clearHighlights();
         refreshBoard();
     }
 }
