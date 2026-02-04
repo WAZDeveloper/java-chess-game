@@ -2,8 +2,9 @@ package model;
 
 public class Bishop extends Piece {
 
-    public Bishop(boolean white) {
-        super(white, white ? "♗" : "♝");
+    public Bishop(boolean isWhite) {
+        super(isWhite);
+        symbol = isWhite ? "♗" : "♝";
     }
 
     @Override
@@ -37,6 +38,6 @@ public class Bishop extends Piece {
         }
 
         return board[toRow][toCol] == null ||
-                board[toRow][toCol].isWhite() != white;
+                board[toRow][toCol].isWhite() != isWhite;
     }
 }

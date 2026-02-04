@@ -2,8 +2,9 @@ package model;
 
 public class Rook extends Piece {
 
-    public Rook(boolean white) {
-        super(white, white ? "♖" : "♜");
+    public Rook(boolean isWhite) {
+        super(isWhite);
+        symbol = isWhite ? "♖" : "♜";
     }
 
     @Override
@@ -38,7 +39,7 @@ public class Rook extends Piece {
         }
 
         return board[toRow][toCol] == null ||
-                board[toRow][toCol].isWhite() != white;
+                board[toRow][toCol].isWhite() != isWhite;
 
     }
 

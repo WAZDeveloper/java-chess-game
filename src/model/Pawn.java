@@ -2,8 +2,9 @@ package model;
 
 public class Pawn extends Piece {
 
-    public Pawn(boolean white) {
-        super(white, white ? "♙" : "♟");
+    public Pawn(boolean isWhite) {
+        super(isWhite);
+        symbol = isWhite ? "♙" : "♟";
     }
 
     @Override
@@ -11,8 +12,8 @@ public class Pawn extends Piece {
             int fromRow, int fromCol,
             int toRow, int toCol,
             Piece[][] board) {
-        int direction = white ? -1 : 1;
-        int startRow = white ? 6 : 1;
+        int direction = isWhite ? -1 : 1;
+        int startRow = isWhite ? 6 : 1;
 
         // 1️⃣ Movimiento simple (1 casilla)
         if (fromCol == toCol &&
@@ -34,7 +35,7 @@ public class Pawn extends Piece {
         if (Math.abs(fromCol - toCol) == 1 &&
                 toRow - fromRow == direction &&
                 board[toRow][toCol] != null &&
-                board[toRow][toCol].white != white) {
+                board[toRow][toCol].isWhite != isWhite) {
             return true;
         }
 

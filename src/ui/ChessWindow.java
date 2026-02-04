@@ -139,5 +139,9 @@ public class ChessWindow extends JFrame {
 
         clearHighlights();
         refreshBoard();
+        if (gameBoard.isCheckMate(!whiteTurn)) {
+            JOptionPane.showMessageDialog(this, "JAQUE MATE");
+        }
     }
+
 }

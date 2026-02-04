@@ -2,28 +2,23 @@ package model;
 
 public abstract class Piece {
 
-    protected boolean white;
+    protected boolean isWhite;
     protected String symbol;
 
-    public Piece(boolean white, String symbol) {
-        this.white = white;
-        this.symbol = symbol;
+    public Piece(boolean isWhite) {
+        this.isWhite = isWhite;
     }
 
     public boolean isWhite() {
-        return white;
+        return isWhite;
     }
 
     public String getSymbol() {
         return symbol;
     }
 
-    /*
-     * Cada pieza define su propia regla de movimiento
-     */
     public abstract boolean isValidMove(
-            int fromRow, int fromCol,
-            int toRow, int toCol,
+            int startRow, int startCol,
+            int targetRow, int targetCol,
             Piece[][] board);
-
 }

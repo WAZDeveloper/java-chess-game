@@ -2,8 +2,9 @@ package model;
 
 public class Knight extends Piece {
 
-    public Knight(boolean white) {
-        super(white, white ? "♘" : "♞");
+    public Knight(boolean isWhite) {
+        super(isWhite);
+        symbol = isWhite ? "♘" : "♞";
     }
 
     @Override
@@ -21,6 +22,6 @@ public class Knight extends Piece {
         }
 
         return board[toRow][toCol] == null ||
-                board[toRow][toCol].white != white;
+                board[toRow][toCol].isWhite != isWhite;
     }
 }
